@@ -34,8 +34,5 @@ services:
     volumes:
       # Persists $GBRAIN_HOME: config, the PGLite database files, tokens,
       # logs. This volume IS the brain — back it up to keep your data.
-      - gbrain_data:/data
+      - ./gbrain_data:/data
     restart: unless-stopped
-
-volumes:
-  gbrain_data:
