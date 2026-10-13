@@ -22,6 +22,10 @@ supabase/.temp/
 # `import path from 'admin/dist/index.html' with { type: 'file' }`).
 # Build via: cd admin && bun install && bun run build.
 admin/node_modules
+# docker-compose.yml bind-mounts the brain's $GBRAIN_HOME here (./gbrain_data:/data)
+# instead of a named Docker volume — the actual PGLite database, tokens, and
+# logs live on the host at this path. Never commit a live brain's data.
+gbrain_data/
 .idea
 eval/reports/
 eval/data/world-v1/world.html
