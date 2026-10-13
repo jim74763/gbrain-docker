@@ -18,12 +18,21 @@ services:
       - "3131:3131"
     environment:
       # Extra flags for the first-run `gbrain init` (docker-entrypoint.sh).
-      # Example: "--embedding-model text-embedding-3-small" with
-      # OPENAI_API_KEY set below to enable embeddings/hybrid search.
-      GBRAIN_INIT_ARGS: ${GBRAIN_INIT_ARGS:-}
+      # Only takes effect on a brand-new $GBRAIN_HOME — embedding dimensions
+      # are baked into the schema at init time, so switching an EXISTING
+      # brain's embedding provider needs `gbrain init --force` (destructive:
+      # re-embeds from scratch). Default below routes embeddings through
+      # OpenRouter (one key, see docs/integrations/embedding-providers.md).
+      GBRAIN_INIT_ARGS: ${GBRAIN_INIT_ARGS:---embedding-model openrouter:openai/text-embedding-3-small}
       GBRAIN_ADMIN_BOOTSTRAP_TOKEN: ${GBRAIN_ADMIN_BOOTSTRAP_TOKEN}
-      # Provider API keys, only if you want embeddings / LLM-assisted
-      # enrichment. Uncomment what you use.
+      # Model provider. Set OPENROUTER_API_KEY in .env (one key routes chat
+      # + embeddings through OpenRouter to Anthropic/OpenAI/Google/etc. —
+      # see docs/integrations/embedding-providers.md). GBRAIN_MODEL picks
+      # the chat/reasoning model live, no re-init needed to change it.
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY:-}
+      GBRAIN_MODEL: ${GBRAIN_MODEL:-openrouter:moonshotai/kimi-k3}
+      # Direct-provider keys, as an alternative to OpenRouter. Uncomment what
+      # you use (and drop the OpenRouter lines above).
       # ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       # OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       # Required once gbrain sits behind this (or any) reverse proxy, so
